@@ -1,0 +1,71 @@
+## 🔐 PHASE 1: User Authentication
+
+- [x] Register user using `UserCreationForm` (username, email, password)
+- [x] Redirect to login after successful registration
+- [x] Custom login form using email + password
+- [x] Set `LOGIN_URL` in settings
+- [x] Protect views using `@login_required`
+- [x] Logout view using POST method (secure logout)
+
+
+## 💸 PHASE 2: Expense Functionality (CRUD)
+
+- [x] Create Expense model with:
+  - user (ForeignKey)
+  - title (CharField)
+  - amount (DecimalField)
+  - category (choices)
+  - date (DateField)
+
+- [x] Add Expense
+  - Use `ExpenseForm` with custom `DateInput`
+  - Assign `request.user` before saving
+
+- [x] List Expenses
+  - Show only logged-in user’s expenses
+  - Format date & amount
+
+- [x] Filter Expenses
+  - [x] Filter by category (dropdown)
+  - [ ] Filter by date range (start - end)
+
+- [ ] Edit Expense
+  - Prefill form with existing data
+  - Update only if owned by user
+
+- [ ] Delete Expense
+  - Confirm before deletion
+  - Delete only if owned by user
+
+
+## 📊 PHASE 3: Advanced Features (Optional)
+
+- [ ] Monthly Summary of total spending
+- [ ] Category-wise chart (Pie Chart using Chart.js)
+- [ ] Sorting (by date or amount)
+- [ ] Pagination if many expenses
+
+
+## 🎨 PHASE 4: UI Styling
+
+- [ ] Add Bootstrap or Tailwind CSS
+- [ ] Build responsive navbar with:
+  - Home
+  - Add Expense
+  - Logout
+
+- [ ] Style forms and expense list nicely
+- [ ] Add success/error messages using Django `messages` framework
+
+
+## 🚀 PHASE 5: Polish & Deploy
+
+- [ ] Clean up unused code and add comments
+- [ ] Write `README.md`:
+  - Project overview
+  - Features
+  - Screenshots
+  - Setup instructions
+
+- [ ] Push project to GitHub
+- [ ] (Optional) Deploy to Render or Railway

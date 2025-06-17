@@ -1,0 +1,18 @@
+This file contains detail explanation of the procedure and components I used to make this expense tracker application.
+1) In installed app I used django.contrib.humanize
+	What it does is it is used to view dates in human readable format
+	Examples (when ‘today’ is 17 Feb 2007):
+	16 Feb 2007 becomes yesterday.
+	17 Feb 2007 becomes today
+	18 Feb 2007 becomes tomorrow.
+	Examples (when ‘now’ is 17 Feb 2007 16:30:00):
+	17 Feb 2007 16:30:00 becomes now.
+	17 Feb 2007 16:29:31 becomes 29 seconds ago.
+	17 Feb 2007 16:29:00 becomes a minute ago.
+	17 Feb 2007 16:25:35 becomes 4 minutes ago.
+
+2) Then I'll make models first
+3) model banayesi data store garne admin.py ma manually because hamle tespaxi sabai expense display garne banaucham view so test garna sajilo huncha
+4) tespaxi add expense view banaucham(yo bhanda paile hamle forms.py use garcham expense add garne form kasto hunu parcha bhanera).
+5) aaba userlogin banauchu
+6) now create form for registration
