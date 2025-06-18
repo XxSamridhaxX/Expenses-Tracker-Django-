@@ -16,3 +16,10 @@ This file contains detail explanation of the procedure and components I used to 
 4) tespaxi add expense view banaucham(yo bhanda paile hamle forms.py use garcham expense add garne form kasto hunu parcha bhanera).
 5) aaba userlogin banauchu
 6) now create form for registration
+
+1
+2
+3
+4
+5
+
