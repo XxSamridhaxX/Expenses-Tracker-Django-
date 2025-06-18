@@ -6,6 +6,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.db.models import Sum
+
+# Imports for time
+from datetime import date
+from django.utils import timezone
+
 # Create your views here.
 
 def helllo(response):
@@ -71,3 +76,39 @@ def register(request):
     else:
         form=RegistrationForm()
     return render(request,'expenses/register.html',{'form':form})
+
+@login_required
+def dashboard(request):
+    today = date.today()
+    user_expense=Expense.objects.filter(user=request.user)
+    monthly_total=user_expense.filter(date__year=today.year,date__month=today.month).aggregate(total=Sum('amount'))['total'] or 0
+    total_expense=user_expense.aggregate(total=Sum('amount'))['total'] or 0
+    total_count=user_expense.count()
+    month_count=user_expense.filter(date__year=today.year,date__month=today.month).count()
+    recent_expenses=user_expense.order_by('-date')[:5]
+    category_summary = user_expense.values('category').annotate(total=Sum('amount'))
+    # In django user.objects.constraint gives query set as: [
+    # {"category": "Food", "amount": 50},
+    # {"category": "Food", "amount": 20},
+    # ]
+    # And when you do this user_expense.values('category') it returns a dictionary of distinct items
+    # [
+#     {"category": "Food"},
+#     {"category": "Food"},
+#     {"category": "Travel"},
+# ]
+    
+    # You may think what annote does its just aggregation function done to every field
+    # This performs an aggregation — it adds a computed field to each group from values(). In this case, it’s summing up the amount field for each group.
+
+    context={
+        "monthly_total": monthly_total,
+        "total_expense": total_expense,
+        "total_count": total_count,
+        "month_count": month_count,
+        "recent_expenses": recent_expenses,
+        "category_summary": category_summary
+    }
+
+    return render(request,'expenses/dashboard.html',context)
+

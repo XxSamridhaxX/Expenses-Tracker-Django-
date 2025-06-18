@@ -1,0 +1,43 @@
+{% extends 'expenses/base.html' %}
+
+
+{% block content %}
+<div style="margin:20px">
+    <h1>Welcome {{request.user.username}}</h1>
+    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; margin-top:65px; border-radius: 8px;">
+        <h2>Your summary</h2>
+        <p><Strong>📊 Total Expenses:</Strong>RS {{total_expense}}</p>
+        <p><Strong>📊 This Month's Expenses:</Strong>RS {{monthly_total}}</p>
+        <p><Strong>📊 Total Number of Expenses:</Strong>{{total_count}}</p>
+        <p><Strong>📊 Total Number of Expenses this month:</Strong>{{month_count}}</p>
+    </div>
+    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+        <div>
+            <h2>Recent Expenses</h2>
+        
+        {% for x in recent_expenses %}
+        <h3>{{x.title}}</h3>
+        <p>{{x.amount}}</p>
+        <p>{{x.category}}</p>
+        <p>{{x.date}}</p>
+        <hr>
+        {% endfor %}
+        </div>
+    </div>
+    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+    <h2>Expenses By Category</h2>
+    {% for item in category_summary %}
+
+    <h3>
+        {{ item.category }} 
+        <span style="float: right;">${{ item.total }}</span>
+      </h3>
+    {% empty %}
+    <p>No expenses recorded yet.</p>
+    {% endfor %}
+    </div>
+    
+
+</div>
+
+{% endblock %}

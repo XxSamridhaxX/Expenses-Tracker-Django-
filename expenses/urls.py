@@ -6,10 +6,19 @@ urlpatterns = [
     path('',views.expense_list,name='expense_list'),
     path('addExpense/',views.add_expense,name='add_expense'),
 
+    # For dashboard
+    path('dashboard/',views.dashboard,name="dashboard"),
+
     # For registration of user
     path('register/',views.register,name="register"),
 
     # For login and logout
     path('login/',views.email_login,name='login'),
     path("logout/",LogoutView.as_view(next_page="login"),name="logout"),
+    
+    
+
+
+
+
 ]

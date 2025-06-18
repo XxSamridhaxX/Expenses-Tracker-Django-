@@ -17,9 +17,6 @@ This file contains detail explanation of the procedure and components I used to 
 5) aaba userlogin banauchu
 6) now create form for registration
 
-1
-2
-3
-4
-5
+I used a new file for dummy variable that is: expenses_seed.py
+its under management and command folder inside expenses folder, both the new file should have __init__.py
 

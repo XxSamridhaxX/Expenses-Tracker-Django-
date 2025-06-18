@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Expense Tracker{% endblock %}</title>
+    <style>
+        * {
+  box-sizing: border-box;
+}
+
+        body {
+    margin: 0;
+    padding: 0;
+}
+    </style>
 </head>
 <body>
     {% include 'expenses/navbar.html' %}
@@ -11,5 +21,22 @@
     {% block content %}
 
     {% endblock %}
+    <script>
+        let prevScrollpos = window.pageYOffset;
+        const navbar = document.querySelector("nav");
+      
+        window.onscroll = function () {
+          const currentScrollPos = window.pageYOffset;
+      
+          if (prevScrollpos > currentScrollPos) {
+            // Scrolling up
+            navbar.style.top = "0";
+          } else {
+            // Scrolling down
+            navbar.style.top = "-120px"; // or -100px depending on navbar height
+          }
+          prevScrollpos = currentScrollPos;
+        };
+      </script>
 </body>
 </html>

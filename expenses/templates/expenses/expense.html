@@ -1,39 +1,39 @@
 {% extends 'expenses/base.html' %}
 
 {% block content %}
-<div>
-    <h3>Filter By Category</h3>
-    <form action="{% url 'expense_list' %}" method="get">
-        <labe>Start Date:</label>
-        <input type="date" name="start_date" value="{{start_date}}">
-        <labe>End Date:</label>
-        <input type="date" name="end_date" value="{{end_date}}">
-        <label>Category:</label>
-        <select name="category">
-            <option value="">All</option>
-            <option value="Food" {% if category == "Food" %}selected{% endif %}>Food</option>
-            <option value="Transport" {% if category == "Transport" %}selected{% endif %}>Transport</option>
-            <option value="Bills" {% if category == "Bills" %}selected{% endif %}>Bills</option>
-            <option value="Entertainment" {% if category == "Entertainment" %}selected{% endif %}>Entertainment</option>
-            <option value="Other" {% if category == "Other" %}selected{% endif %}>Other</option>
-          </select>
-        <button type="submit">Select</button>
-    </form>
-</div>
-<hr>
-{% for x in expense %}
-    
-
-    <h2>Title: {{x.title}}</h2>
-    <p>Amount: {{x.amount}}</p>
-    <p>Category: {{x.category}}</p>
-    <p>Added-date: {{x.date}}</p>
+<div style="padding-top:110px">
+    <div>
+        <h3>Filter By Category</h3>
+        <form action="{% url 'expense_list' %}" method="get">
+            <labe>Start Date:</label>
+            <input type="date" name="start_date" value="{{start_date}}">
+            <labe>End Date:</label>
+            <input type="date" name="end_date" value="{{end_date}}">
+            <label>Category:</label>
+            <select name="category">
+                <option value="">All</option>
+                <option value="Food" {% if category == "Food" %}selected{% endif %}>Food</option>
+                <option value="Transport" {% if category == "Transport" %}selected{% endif %}>Transport</option>
+                <option value="Bills" {% if category == "Bills" %}selected{% endif %}>Bills</option>
+                <option value="Entertainment" {% if category == "Entertainment" %}selected{% endif %}>Entertainment</option>
+                <option value="Other" {% if category == "Other" %}selected{% endif %}>Other</option>
+              </select>
+            <button type="submit">Select</button>
+        </form>
+    </div>
     <hr>
-    {% endfor %}
     <h2>Total Expense:{{total_expenses}}</h2>
+    {% for x in expense %}
+        
+    
+        <h2>Title: {{x.title}}</h2>
+        <p>Amount: {{x.amount}}</p>
+        <p>Category: {{x.category}}</p>
+        <p>Added-date: {{x.date}}</p>
+        <hr>
+    {% endfor %}
+</div>
 
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
+
+
 {% endblock %}
