@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import Expense
 from expenses.forms import ExpenseForm,EmailLoginForm,RegistrationForm
 from django.contrib import messages
@@ -111,4 +111,21 @@ def dashboard(request):
     }
 
     return render(request,'expenses/dashboard.html',context)
+
+def edit(request,pk):
+    instance=get_object_or_404(Expense,pk=pk,user=request.user)
+    if request.method=="POST":
+        form=ExpenseForm(request.POST,instance=instance)
+        if form.is_valid():
+            expense=form.save(commit=False)
+            expense.user=request.user
+            expense.save()
+            return redirect('expense_list')
+    else:
+        form=ExpenseForm(instance=instance)
+    
+    return render(request,'expenses/edit_expense.html',{'form':form})
+
+
+
 

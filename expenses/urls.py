@@ -6,6 +6,9 @@ urlpatterns = [
     path('',views.expense_list,name='expense_list'),
     path('addExpense/',views.add_expense,name='add_expense'),
 
+    # For editing
+    path('edit/<int:pk>/',views.edit,name='edit'),
+
     # For dashboard
     path('dashboard/',views.dashboard,name="dashboard"),
 
