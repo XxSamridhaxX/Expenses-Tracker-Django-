@@ -126,6 +126,5 @@ def edit(request,pk):
     
     return render(request,'expenses/edit_expense.html',{'form':form})
 
-1 2 2 3 2 
 
 
