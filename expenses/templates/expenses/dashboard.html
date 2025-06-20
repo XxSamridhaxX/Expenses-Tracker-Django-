@@ -4,17 +4,19 @@
 {% block content %}
 <div style="margin:20px">
     <h1>Welcome {{request.user.username}}</h1>
+    
+    <!-- Your summary box -->
     <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; margin-top:65px; border-radius: 8px;">
         <h2>Your summary</h2>
-        <p><Strong>📊 Total Expenses:</Strong>RS {{total_expense}}</p>
-        <p><Strong>📊 This Month's Expenses:</Strong>RS {{monthly_total}}</p>
-        <p><Strong>📊 Total Number of Expenses:</Strong>{{total_count}}</p>
-        <p><Strong>📊 Total Number of Expenses this month:</Strong>{{month_count}}</p>
+        <p><strong>📊 Total Expenses:</strong> रु {{total_expense}}</p>
+        <p><strong>📊 This Month's Expenses:</strong> रु {{monthly_total}}</p>
+        <p><strong>📊 Total Number of Expenses:</strong> {{total_count}}</p>
+        <p><strong>📊 Total Number of Expenses this month:</strong> {{month_count}}</p>
     </div>
+
+    <!-- Recent expenses -->
     <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-        <div>
-            <h2>Recent Expenses</h2>
-        
+        <h2>Recent Expenses</h2>
         {% for x in recent_expenses %}
         <h3>{{x.title}}</h3>
         <p>{{x.amount}}</p>
@@ -22,22 +24,78 @@
         <p>{{x.date}}</p>
         <hr>
         {% endfor %}
-        </div>
     </div>
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-    <h2>Expenses By Category</h2>
-    {% for item in category_summary %}
 
-    <h3>
-        {{ item.category }} 
-        <span style="float: right;">${{ item.total }}</span>
-      </h3>
-    {% empty %}
-    <p>No expenses recorded yet.</p>
-    {% endfor %}
+    <!-- Category Summary -->
+    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+        <h2>Expenses By Category</h2>
+        {% for item in category_summary %}
+        <h3>    
+            {{ item.category }} 
+            <span style="float: right;">रु {{ item.total }}</span>
+        </h3>
+        {% empty %}
+        <p>No expenses recorded yet.</p>
+        {% endfor %}
     </div>
-    
+
+    <!-- Charts -->
+    {{ category_labels|json_script:"category-labels" }}
+    {{ category_totals|json_script:"category-totals" }}
+
+    <canvas id="donutChart" width="auto" height="800px"></canvas>
+
+
+
 
 </div>
 
+
+<!-- 🔽 Paste this AFTER the endblock -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+   const categoryLabels = JSON.parse(document.getElementById('category-labels').textContent);
+    const categoryTotals = JSON.parse(document.getElementById('category-totals').textContent);
+
+    const ctx = document.getElementById('donutChart').getContext('2d');
+    
+    const data = {
+      labels: categoryLabels,
+      datasets: [{
+        label: 'Expense',
+        data: categoryTotals,
+        backgroundColor: [
+    'rgb(255, 99, 132)',
+    'rgb(54, 162, 235)',
+    'rgb(255, 205, 86)',
+    'rgb(75, 192, 192)',
+    'rgb(153, 102, 255)',
+    'rgb(255, 159, 64)'
+],
+        hoverOffset: 4
+      }]
+    };
+    
+    const config = {
+      type: 'doughnut',
+      data: data,
+      options: {
+        responsive: false,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Visual Categorization of this Months Expenses'
+          }
+        }
+      }
+    };
+  
+    new Chart(ctx, config);
+  </script>
+
+
 {% endblock %}
+

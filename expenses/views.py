@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.db.models import Sum
+from django.contrib import messages
+from django.db.models.functions import TruncMonth
 
 # Imports for time
 from datetime import date
@@ -86,6 +88,7 @@ def dashboard(request):
     total_count=user_expense.count()
     month_count=user_expense.filter(date__year=today.year,date__month=today.month).count()
     recent_expenses=user_expense.order_by('-date')[:5]
+    # Category wise data
     category_summary = user_expense.values('category').annotate(total=Sum('amount'))
     # In django user.objects.constraint gives query set as: [
     # {"category": "Food", "amount": 50},
@@ -98,17 +101,47 @@ def dashboard(request):
 #     {"category": "Travel"},
 # ]
     
+
     # You may think what annote does its just aggregation function done to every field
     # This performs an aggregation — it adds a computed field to each group from values(). In this case, it’s summing up the amount field for each group.
+        # Monthly totals
 
-    context={
-        "monthly_total": monthly_total,
-        "total_expense": total_expense,
-        "total_count": total_count,
-        "month_count": month_count,
-        "recent_expenses": recent_expenses,
-        "category_summary": category_summary
-    }
+
+
+  # Monthly totals for bar chart
+    monthly_data = (
+        user_expense
+        .annotate(month=TruncMonth('date'))
+        .values('month')
+        .annotate(total=Sum('amount'))
+        .order_by('month')
+    )
+    month_labels = [item['month'].strftime('%B') for item in monthly_data]
+    month_totals = [item['total'] for item in monthly_data]
+
+
+    # Category-wise totals for donut chart (this month only)
+    this_month_categories = (
+        user_expense
+        .filter(date__year=today.year, date__month=today.month)
+        .values('category')
+        .annotate(total=Sum('amount'))
+    )
+    category_labels = [item['category'] for item in this_month_categories]
+    category_totals = [item['total'] for item in this_month_categories]
+    context = {
+    "monthly_total": monthly_total,
+    "total_expense": total_expense,
+    "total_count": total_count,
+    "month_count": month_count,
+    "recent_expenses": recent_expenses,
+    "category_summary": category_summary,
+    "monthly_data": monthly_data,
+    "category_labels": category_labels,
+    "category_totals":category_totals,
+    "month_labels": month_labels,
+    "month_totals": month_totals,
+}
 
     return render(request,'expenses/dashboard.html',context)
 
@@ -126,5 +159,9 @@ def edit(request,pk):
     
     return render(request,'expenses/edit_expense.html',{'form':form})
 
-
+def delete(request,pk):
+    expense=get_object_or_404(Expense,pk=pk)
+    expense.delete()
+    messages.success(request,"Successfully deleted the expense item")
+    return redirect('expense_list')
 

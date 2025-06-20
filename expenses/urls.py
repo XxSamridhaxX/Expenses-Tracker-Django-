@@ -19,9 +19,6 @@ urlpatterns = [
     path('login/',views.email_login,name='login'),
     path("logout/",LogoutView.as_view(next_page="login"),name="logout"),
     
-    
-
-
-
-
+    # For delete
+    path('delete/<int:pk>/',views.delete,name='delete'),
 ]

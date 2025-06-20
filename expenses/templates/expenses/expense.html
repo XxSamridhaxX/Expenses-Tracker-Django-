@@ -1,45 +1,62 @@
 {% extends 'expenses/base.html' %}
 
 {% block content %}
-<div style="padding-top:110px">
+<div style="padding: 110px 15px 0px 0px; margin-left: 15px;">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
     <div>
         <h3>Filter By Category</h3>
         <form action="{% url 'expense_list' %}" method="get">
-            <labe>Start Date:</label>
-                <input type="date" name="start_date" value="{{start_date}}">
-                <labe>End Date:</label>
-                    <input type="date" name="end_date" value="{{end_date}}">
-                    <label>Category:</label>
-                    <select name="category">
-                        <option value="">All</option>
-                        <option value="Food" {% if category == "Food" %}selected{% endif %}>Food</option>
-                        <option value="Transport" {% if category == "Transport" %}selected{% endif %}>Transport</option>
-                        <option value="Bills" {% if category == "Bills" %}selected{% endif %}>Bills</option>
-                        <option value="Entertainment" {% if category == "Entertainment" %}selected{% endif %}>
-                            Entertainment</option>
-                        <option value="Other" {% if category == "Other" %}selected{% endif %}>Other</option>
-                    </select>
-                    <button type="submit">Select</button>
+            <label>Start Date:</label>
+            <input type="date" name="start_date" value="{{ start_date }}">
+
+            <label>End Date:</label>
+            <input type="date" name="end_date" value="{{ end_date }}">
+
+            <label>Category:</label>
+            <select name="category">
+                <option value="">All</option>
+                <option value="Food" {% if category == "Food" %}selected{% endif %}>Food</option>
+                <option value="Transport" {% if category == "Transport" %}selected{% endif %}>Transport</option>
+                <option value="Bills" {% if category == "Bills" %}selected{% endif %}>Bills</option>
+                <option value="Entertainment" {% if category == "Entertainment" %}selected{% endif %}>Entertainment
+                </option>
+                <option value="Other" {% if category == "Other" %}selected{% endif %}>Other</option>
+            </select>
+
+            <button type="submit">Filter</button>
         </form>
     </div>
-    <hr>
-    <h2>Total Expense:{{total_expenses}}</h2>
 
-    <div style="padding-left:30px;padding-right:30px;">
+    <hr>
+    <h2>Total Expense: {{ total_expenses }}</h2>
+
+    <div style="padding-left: 30px; padding-right: 30px;">
         {% for x in expense %}
-        <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <div
+            style="display: flex; flex-direction: row; justify-content: space-between; border: 1px solid black; padding: 10px; margin-bottom: 10px;">
             <div>
-                <h2>Title: {{x.title}}</h2>
-                <p>Amount: {{x.amount}}</p>
-                <p>Category: {{x.category}}</p>
-                <p>Added-date: {{x.date}}</p>
-                <hr>
+                <h2>Title: {{ x.title }}</h2>
+                <p>Amount: {{ x.amount }}</p>
+                <p>Category: {{ x.category }}</p>
+                <p>Added Date: {{ x.date }}</p>
             </div>
-            <div style="display:flex; align-items: center; text-align: center;">
-                <a href="{% url 'edit' x.id %}">Edit</a>
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <a href="{% url 'edit' x.id %}"
+                    style="text-decoration: none; margin-bottom: 10px; color: rgb(49, 37, 37);">Edit</a>
+                <a href="{% url 'delete' x.id %}"
+                    style="text-decoration: none; color: rgb(49, 37, 37); margin-top: 10px;">Delete</a>
             </div>
         </div>
+        {% empty %}
+        <p>No expenses found for the selected filter.</p>
         {% endfor %}
-
     </div>
-    {% endblock %}
+</div>
+{% endblock %}
