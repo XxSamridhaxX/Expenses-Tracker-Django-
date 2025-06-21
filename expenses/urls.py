@@ -21,4 +21,7 @@ urlpatterns = [
     
     # For delete
     path('delete/<int:pk>/',views.delete,name='delete'),
+
+    # Export to csv
+    path('export/',views.export_csv,name='export'),
 ]

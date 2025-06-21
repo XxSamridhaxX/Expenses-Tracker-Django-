@@ -42,12 +42,21 @@
     <!-- Charts -->
     {{ category_labels|json_script:"category-labels" }}
     {{ category_totals|json_script:"category-totals" }}
+    {{ month_labels|json_script:"month_labels" }}
+    {{ month_totals|json_script:"month_totals" }}
 
-    <canvas id="donutChart" width="auto" height="800px"></canvas>
+    <div>
+      <h1 style="text-align: center;">Graph Visuals</h1>
+      <div style="display:flex; flex-direction: row; justify-content: space-evenly;">
+      
+        <canvas id="donutChart" width="auto" height="500px" style="margin: none;"></canvas>
+        <canvas id="barChart" width="auto" height="500px"></canvas>
+      </div>
+
+    </div>
 
 
-
-
+<a href="{% url 'export' %}" style="text-decoration: none;">Export To CSV</a>
 </div>
 
 
@@ -56,8 +65,11 @@
 <script>
    const categoryLabels = JSON.parse(document.getElementById('category-labels').textContent);
     const categoryTotals = JSON.parse(document.getElementById('category-totals').textContent);
-
-    const ctx = document.getElementById('donutChart').getContext('2d');
+  const monthLabels = JSON.parse(document.getElementById('month_labels').textContent);
+  const monthTotals = JSON.parse(document.getElementById('month_totals').textContent);
+    
+  // For donut chart
+  const ctx = document.getElementById('donutChart').getContext('2d');
     
     const data = {
       labels: categoryLabels,
@@ -65,12 +77,12 @@
         label: 'Expense',
         data: categoryTotals,
         backgroundColor: [
-    'rgb(255, 99, 132)',
-    'rgb(54, 162, 235)',
-    'rgb(255, 205, 86)',
-    'rgb(75, 192, 192)',
-    'rgb(153, 102, 255)',
-    'rgb(255, 159, 64)'
+    '#B95C5C',
+    '#635CB9',
+    '#5CB96C',
+    '#B9B95C',
+    '#5CB6B9',
+    '#5CB6B9'
 ],
         hoverOffset: 4
       }]
@@ -80,7 +92,16 @@
       type: 'doughnut',
       data: data,
       options: {
+        cutout: '50%',
         responsive: false,
+        layout: {
+      padding: {
+        // top: 50,
+        // bottom: 50,
+        // left: 50,
+        // right: 50,
+      }
+    },
         plugins: {
           legend: {
             position: 'top',
@@ -94,6 +115,41 @@
     };
   
     new Chart(ctx, config);
+
+
+    const barCtx = document.getElementById('barChart').getContext('2d');
+
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: 'Monthly Expenses',
+                data: monthTotals,
+                backgroundColor: '#55BA4E',
+                borderColor: '#BA4E55',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true
+                },
+                title: {
+                    display: true,
+                    text: 'Monthly Expense Trend (This Year)'
+                }
+            }
+        }
+    });
+
   </script>
 
 

@@ -165,3 +165,21 @@ def delete(request,pk):
     messages.success(request,"Successfully deleted the expense item")
     return redirect('expense_list')
 
+
+
+import csv
+def export_csv(request):
+    # To import all the data related to the user
+    user_expense=Expense.objects.filter(user=request.user)
+
+    response = HttpResponse(
+        content_type="text/csv",
+        headers= {"Content-Disposition": 'attachment; filename="{request.username}_expense_details.csv"'}
+    )
+
+    writer= csv.writer(response)
+    writer.writerow(["title",'amount','category','date'])
+    expense_fields = user_expense.values_list("title",'amount','category','date')
+    for expense in expense_fields:
+        writer.writerow(expense)
+    return response
