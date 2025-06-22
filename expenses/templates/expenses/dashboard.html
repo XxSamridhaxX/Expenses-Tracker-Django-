@@ -2,92 +2,106 @@
 
 
 {% block content %}
-<div style="margin:20px">
-    <h1>Welcome {{request.user.username}}</h1>
+<div style="padding: 110px 0px 0px 0px; margin-left: 15px;">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  <h1>Welcome {{request.user.username}}</h1>
+  <!-- Your summary box -->
+  <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; margin-top:25px; border-radius: 8px;">
+    <h2>Your summary</h2>
+    <p><strong>📊 Total Expenses:</strong> रु {{total_expense}}</p>
+    <p><strong>📊 This Month's Expenses:</strong> रु {{monthly_total}}</p>
+    <p><strong>📊 Total Number of Expenses:</strong> {{total_count}}</p>
+    <p><strong>📊 Total Number of Expenses this month:</strong> {{month_count}}</p>
+  </div>
+
+  <!-- Recent expenses -->
+  <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+
+    <div style="display: flex; justify-content: space-between;">
+      <h2>Recent Expenses</h2>
     
-    <!-- Your summary box -->
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; margin-top:65px; border-radius: 8px;">
-        <h2>Your summary</h2>
-        <p><strong>📊 Total Expenses:</strong> रु {{total_expense}}</p>
-        <p><strong>📊 This Month's Expenses:</strong> रु {{monthly_total}}</p>
-        <p><strong>📊 Total Number of Expenses:</strong> {{total_count}}</p>
-        <p><strong>📊 Total Number of Expenses this month:</strong> {{month_count}}</p>
+      <form action="{% url 'export' %}" method="get">
+        <button type="submit" class="btn btn-primary"
+          onclick="setTimeout(()=>{alert('Your download has been started')},200)">Export To CSV</button>
+      </form>
+    </div>
+    <hr>
+    {% for x in recent_expenses %}
+    <h3>{{x.title}}</h3>
+    <p><strong>Amount:</strong> रु {{x.amount}}</p>
+    <p><strong>Category:</strong> {{x.category}}</p>
+    <p><strong>Added date:</strong> {{x.date}}</p>
+    <hr>
+    {% endfor %}
+  </div>
+
+  <!-- Category Summary -->
+  <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+    <h2>Expenses By Category</h2>
+    {% for item in category_summary %}
+    <h3>
+      {{ item.category }}
+      <span style="float: right;">रु {{ item.total }}</span>
+    </h3>
+    {% empty %}
+    <p>No expenses recorded yet.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Charts -->
+  {{ category_labels|json_script:"category-labels" }}
+  {{ category_totals|json_script:"category-totals" }}
+  {{ month_labels|json_script:"month_labels" }}
+  {{ month_totals|json_script:"month_totals" }}
+
+  <div>
+    <h1 style="text-align: center;margin-bottom: 50px;">Graphical Visualization of Expenses</h1>
+    <div style="display:flex; flex-direction: row; justify-content: space-evenly;">
+
+      <canvas id="donutChart" width="auto" height="500px" style="margin: none;"></canvas>
+      <canvas id="barChart" width="auto" height="500px"></canvas>
     </div>
 
-    <!-- Recent expenses -->
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-        <h2>Recent Expenses</h2>
-        {% for x in recent_expenses %}
-        <h3>{{x.title}}</h3>
-        <p>{{x.amount}}</p>
-        <p>{{x.category}}</p>
-        <p>{{x.date}}</p>
-        <hr>
-        {% endfor %}
-    </div>
-
-    <!-- Category Summary -->
-    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-        <h2>Expenses By Category</h2>
-        {% for item in category_summary %}
-        <h3>    
-            {{ item.category }} 
-            <span style="float: right;">रु {{ item.total }}</span>
-        </h3>
-        {% empty %}
-        <p>No expenses recorded yet.</p>
-        {% endfor %}
-    </div>
-
-    <!-- Charts -->
-    {{ category_labels|json_script:"category-labels" }}
-    {{ category_totals|json_script:"category-totals" }}
-    {{ month_labels|json_script:"month_labels" }}
-    {{ month_totals|json_script:"month_totals" }}
-
-    <div>
-      <h1 style="text-align: center;">Graph Visuals</h1>
-      <div style="display:flex; flex-direction: row; justify-content: space-evenly;">
-      
-        <canvas id="donutChart" width="auto" height="500px" style="margin: none;"></canvas>
-        <canvas id="barChart" width="auto" height="500px"></canvas>
-      </div>
-
-    </div>
+  </div>
 
 
-<a href="{% url 'export' %}" style="text-decoration: none;">Export To CSV</a>
-</div>
 
 
-<!-- 🔽 Paste this AFTER the endblock -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-   const categoryLabels = JSON.parse(document.getElementById('category-labels').textContent);
+  <!-- 🔽 Paste this AFTER the endblock -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const categoryLabels = JSON.parse(document.getElementById('category-labels').textContent);
     const categoryTotals = JSON.parse(document.getElementById('category-totals').textContent);
-  const monthLabels = JSON.parse(document.getElementById('month_labels').textContent);
-  const monthTotals = JSON.parse(document.getElementById('month_totals').textContent);
-    
-  // For donut chart
-  const ctx = document.getElementById('donutChart').getContext('2d');
-    
+    const monthLabels = JSON.parse(document.getElementById('month_labels').textContent);
+    const monthTotals = JSON.parse(document.getElementById('month_totals').textContent);
+
+    // For donut chart
+    const ctx = document.getElementById('donutChart').getContext('2d');
+
     const data = {
       labels: categoryLabels,
       datasets: [{
         label: 'Expense',
         data: categoryTotals,
         backgroundColor: [
-    '#B95C5C',
-    '#635CB9',
-    '#5CB96C',
-    '#B9B95C',
-    '#5CB6B9',
-    '#5CB6B9'
-],
+          '#B95C5C',
+          '#635CB9',
+          '#5CB96C',
+          '#B9B95C',
+          '#5CB6B9',
+          '#5CB6B9'
+        ],
         hoverOffset: 4
       }]
     };
-    
+
     const config = {
       type: 'doughnut',
       data: data,
@@ -95,13 +109,13 @@
         cutout: '50%',
         responsive: false,
         layout: {
-      padding: {
-        // top: 50,
-        // bottom: 50,
-        // left: 50,
-        // right: 50,
-      }
-    },
+          padding: {
+            // top: 50,
+            // bottom: 50,
+            // left: 50,
+            // right: 50,
+          }
+        },
         plugins: {
           legend: {
             position: 'top',
@@ -113,46 +127,44 @@
         }
       }
     };
-  
+
     new Chart(ctx, config);
 
 
     const barCtx = document.getElementById('barChart').getContext('2d');
 
     new Chart(barCtx, {
-        type: 'bar',
-        data: {
-            labels: monthLabels,
-            datasets: [{
-                label: 'Monthly Expenses',
-                data: monthTotals,
-                backgroundColor: '#55BA4E',
-                borderColor: '#BA4E55',
-                borderWidth: 3
-            }]
+      type: 'bar',
+      data: {
+        labels: monthLabels,
+        datasets: [{
+          label: 'Monthly Expenses',
+          data: monthTotals,
+          backgroundColor: '#55BA4E',
+          borderColor: '#BA4E55',
+          borderWidth: 3
+        }]
+      },
+      options: {
+        responsive: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
         },
-        options: {
-            responsive: false,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true
-                },
-                title: {
-                    display: true,
-                    text: 'Monthly Expense Trend (This Year)'
-                }
-            }
+        plugins: {
+          legend: {
+            display: true
+          },
+          title: {
+            display: true,
+            text: 'Monthly Expense Trend (This Year)'
+          }
         }
+      }
     });
 
   </script>
 
 
-{% endblock %}
-
-123
+  {% endblock %}

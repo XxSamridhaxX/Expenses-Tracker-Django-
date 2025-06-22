@@ -16,7 +16,7 @@ from django.utils import timezone
 # Create your views here.
 
 def helllo(response):
-    return HttpResponse("Hello, world!")
+     return HttpResponse("Hello, world!")
 
 @login_required
 def expense_list(request):
@@ -171,15 +171,44 @@ import csv
 def export_csv(request):
     # To import all the data related to the user
     user_expense=Expense.objects.filter(user=request.user)
+    if not user_expense.exists():
+        messages.warning(request,"Don't have any data to export to CSV")
+        return redirect('dashboard')
 
     response = HttpResponse(
         content_type="text/csv",
-        headers= {"Content-Disposition": 'attachment; filename="{request.username}_expense_details.csv"'}
+        headers= {"Content-Disposition": f'attachment; filename="{request.user}_expense_details.csv"'}
     )
 
     writer= csv.writer(response)
     writer.writerow(["title",'amount','category','date'])
     expense_fields = user_expense.values_list("title",'amount','category','date')
     for expense in expense_fields:
+        writer.writerow(expense)
+    return response
+
+def export_filtered_csv(request):
+    user_expense=Expense.objects.filter(user=request.user)
+
+    category=request.GET.get('category')
+    start_date=request.GET.get('start_date')
+    end_date=request.GET.get('end_date')
+    if category:
+        user_expense=user_expense.filter(category=category)
+    if start_date:
+        user_expense=user_expense.filter(date__gte=start_date)   
+    if end_date:
+        user_expense=user_expense.filter(date__lte=end_date)   
+
+    if not user_expense.exists():
+        messages.warning(request, "No expenses found for the applied filters.")
+        return redirect('expense_list')  # Use your actual view name here
+
+    filename=f"{request.user.username}_{start_date}to{end_date}_{category}.csv"
+    response= HttpResponse(content_type="text/csv",headers= {"Content-Disposition":f'attachment; filename="{filename}"'})
+    writer=csv.writer(response)
+    writer.writerow(['title','amount','category','date'])
+    expense_field=user_expense.values_list('title','amount','category','date')
+    for expense in expense_field:
         writer.writerow(expense)
     return response

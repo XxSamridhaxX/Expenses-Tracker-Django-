@@ -24,4 +24,7 @@ urlpatterns = [
 
     # Export to csv
     path('export/',views.export_csv,name='export'),
+
+    # Export Filtered CSV
+    path('export_filtered',views.export_filtered_csv,name="filtered_csv")
 ]

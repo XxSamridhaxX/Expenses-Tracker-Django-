@@ -4,7 +4,7 @@
     <form method="POST" style="margin-top: 110px; padding-left: 30px;">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Add Expense</button>
+        <button type="submit" class="btn btn-success">Add Expense</button>
     </form>
 
 {% endblock %}

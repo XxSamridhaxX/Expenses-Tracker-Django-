@@ -17,10 +17,11 @@ class ExpenseForm(forms.ModelForm):
 
 
 class EmailLoginForm(forms.Form):
-    email=forms.EmailField()
-    password=forms.CharField(widget=forms.PasswordInput)
-
+    email=forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Enter your email'}))
+    password=forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Enter your password'}))
+    # password=forms.CharField(widget=forms.PasswordInput)
     # Creates Input field for Email and Password in form <input type="password" name="password">
+
 
     def clean(self):
         # This method is called when you use user.is_valid()
