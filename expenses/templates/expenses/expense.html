@@ -12,7 +12,7 @@
     {% endif %}
     <div>
         <h3>Filter By Category</h3>
-        <div style="display: flex; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
             <form action="{% url 'expense_list' %}" method="get">
                 <label>Start Date:</label>
                 <input type="date" name="start_date" value="{{ start_date }}">
@@ -31,8 +31,10 @@
                     <option value="Other" {% if category == "Other" %}selected{% endif %}>Other</option>
                 </select>
                 
-                <button type="submit">Filter</button>
+                <button type="submit onsubmit="return confirm('Confirm you want to delete the item?')"" class="btn btn-secondary">Filter</button>
             </form>
+
+            <!-- This is for the filtered download of CSV file -->
             <form action="{% url 'filtered_csv' %}">
                 <input type="hidden" name="start_date" value="{{start_date}}">
                 <input type="hidden" name="end_date" value="{{end_date}}">
@@ -48,9 +50,9 @@
     <br>
 
     <div style="padding-left: 30px; padding-right: 30px;">
-        {% for x in expense %}
+        {% for x in page_obj %}
         <div
-            style="display: flex; flex-direction: row; justify-content: space-between; border: 1px solid black; padding: 10px; margin-bottom: 10px;">
+            style="display: flex; flex-direction: row; justify-content: space-between; border: 1px solid rgb(153, 151, 151); padding: 20px; margin-bottom: 10px; border-radius: 34px;">
             <div>
                 <h2>Title: {{ x.title }}</h2>
                 <p>Amount: रु {{ x.amount }}</p>
@@ -62,7 +64,7 @@
                     <button type="submit" class="btn btn-outline-success" style="width: 100px; height: 40px; margin-bottom: 10px;">Edit</button>
                 </form>
 
-                <form action="{% url 'delete' x.id %}">
+                <form action="{% url 'delete' x.id %}" onsubmit="return confirm('Confirm you want to delete the item?')">
                     <button type="submit" class="btn btn-outline-danger" style="width: 100px; height: 40px; margin-top: 10px;">Delete</button>
                 </form>
             </div>
@@ -70,6 +72,18 @@
         {% empty %}
         <p>No expenses found for the selected filter.</p>
         {% endfor %}
+        <!-- For controlling the page number -->
+
+        <div>
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            Page {{page_obj.number}} of {{ page_obj.paginator.num_pages }}
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

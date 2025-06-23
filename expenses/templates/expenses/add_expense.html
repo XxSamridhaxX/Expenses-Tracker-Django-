@@ -1,10 +1,16 @@
 {% extends 'expenses/base.html' %}
 {% block content %}
-<h2>Add Expense</h2>
-    <form method="POST" style="margin-top: 110px; padding-left: 30px;">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Add Expense</button>
-    </form>
+<div style="display: flex; flex-direction: column; align-items: center; margin-top:150px;">
+    <h2>Add Expense</h2>
+    <div>
+        <form method="POST"
+            style="display: inline-block; padding:70px 40px 70px 40px; border-radius: 40px; background-color: rgb(146, 217, 202);">
+            {% csrf_token %}
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Add Expense</button>
+        </form>
+    </div>
 
+</div>
 {% endblock %}

@@ -9,7 +9,10 @@ class ExpenseForm(forms.ModelForm):
         model= Expense
         fields=['title','amount','category','date']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'})
+            'title':forms.TextInput(attrs={'class':'form-control','placeholder':'Enter Expense Title'}),
+            'amount':forms.TextInput(attrs={'class':'form-control','placeholder':'रु XXXXXX.xxxxx'}),
+            'date':forms.TextInput(attrs={'class':'form-control'}),
+            'date': forms.DateInput(attrs={'type': 'date','class':'form-control'})
         }
         # It customizes the HTML widget used for the date field in your form by using an HTML <input type="date">.
         # Yo mathi ko add garena bhane date manually lekhnu parcha like 2/5/2025 bhanera tra hamle use garem bhane chai hamle select garna milcha date

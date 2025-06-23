@@ -4,7 +4,7 @@
 {% block content %}
 
 <div style="display: flex; justify-content: center; margin-top:150px;">
-<form method="POST" style="display: inline-block; padding:70px 40px 70px 40px; border: solid rgb(130, 128, 128); border-radius: 40px ;">
+<form method="POST" style="display: inline-block; padding:70px 40px 70px 40px; border-radius: 40px; background-color: rgb(154, 190, 219);">
     {% csrf_token %}
     <div class="mb-5">
         {{ form.email.label_tag }}

@@ -26,5 +26,7 @@ urlpatterns = [
     path('export/',views.export_csv,name='export'),
 
     # Export Filtered CSV
-    path('export_filtered',views.export_filtered_csv,name="filtered_csv")
+    path('export_filtered',views.export_filtered_csv,name="filtered_csv"),
+
+    path('change/',views.change_password,name='change_password'),
 ]
