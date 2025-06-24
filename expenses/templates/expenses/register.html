@@ -2,11 +2,13 @@
 
 
 {% block content %}
+<div style="display: flex; justify-content: center; margin-top:150px;">
+    <form method="POST"
+        style="display: inline-block; padding:70px 40px 70px 40px; border-radius: 40px; background-color: rgb(154, 190, 219);">
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
 
-{% endblock %}
+    {% endblock %}

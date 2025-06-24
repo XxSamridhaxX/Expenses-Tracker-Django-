@@ -156,7 +156,7 @@ def dashboard(request):
 }
 
     return render(request,'expenses/dashboard.html',context)
-
+@login_required
 def edit(request,pk):
     instance=get_object_or_404(Expense,pk=pk,user=request.user)
     if request.method=="POST":
@@ -172,6 +172,8 @@ def edit(request,pk):
     
     return render(request,'expenses/edit_expense.html',{'form':form})
 
+
+@login_required
 def delete(request,pk):
     expense=get_object_or_404(Expense,pk=pk)
     expense.delete()
@@ -181,6 +183,7 @@ def delete(request,pk):
 
 
 import csv
+@login_required
 def export_csv(request):
     # To import all the data related to the user
     user_expense=Expense.objects.filter(user=request.user)
@@ -200,6 +203,8 @@ def export_csv(request):
         writer.writerow(expense)
     return response
 
+
+@login_required
 def export_filtered_csv(request):
     user_expense=Expense.objects.filter(user=request.user)
 
@@ -229,7 +234,7 @@ def export_filtered_csv(request):
 # For the Changing of Password
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-
+@login_required
 def change_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(user=request.user,data=request.POST)
@@ -243,3 +248,15 @@ def change_password(request):
     else:
         form = PasswordChangeForm(user=request.user)
     return render(request, "expenses/change_password.html", {"form": form})
+
+from expenses.forms import EditUserForm
+def edit_profile(request):
+    if request.method=="POST":
+        editedUserform=EditUserForm(request.POST,instance=request.user)
+        if editedUserform.is_valid():
+            editedUserform.save()
+            messages.success(request,"Profile Updated Successfully")
+            return redirect('dashboard')
+    else:
+        editedUserform=EditUserForm(instance=request.user)
+    return(request,'expenses/edit_profile.html',{'editedUserform':editedUserform})

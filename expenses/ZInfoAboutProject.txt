@@ -20,3 +20,6 @@ This file contains detail explanation of the procedure and components I used to 
 I used a new file for dummy variable that is: expenses_seed.py
 its under management and command folder inside expenses folder, both the new file should have __init__.py
 
+
+6/24/2025 completed the user detail update completely
+

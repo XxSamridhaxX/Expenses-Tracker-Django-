@@ -52,3 +52,14 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model= User
         fields=['username','email','password1','password2']
+
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model= User
+        fields = ['username','email']
+        widgets = {
+            'username':forms.TextInput(attrs={'class':'form-control','placeholder':"Enter New Username"}),
+            'email':forms.EmailInput(attrs={'class':'form-control','placeholder':'Enter New Email'})
+        }
+
