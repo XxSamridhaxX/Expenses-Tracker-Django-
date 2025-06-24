@@ -31,7 +31,22 @@ A minimal yet fully functional Expense Tracker built with Django. This app allow
 ## Screenshots
 * login:
 ![Login](https://github.com/user-attachments/assets/33ebf4b8-f6ef-4347-b521-8e389f312a42)
+*Register:
+![Register](https://github.com/user-attachments/assets/fd02e128-d022-483a-ae41-6142ad518073)
 
+* Expense Page
+![ExpensePage](https://github.com/user-attachments/assets/e7adf526-3140-4a25-9837-73c7ce240ff7)
+
+![expensepage2](https://github.com/user-attachments/assets/70488113-3bd9-48c1-a81f-9478b65bd8e9)
+
+*Add Expense:
+![AddExpense](https://github.com/user-attachments/assets/9ca0bfd1-9cb0-4af3-b9a8-da8e584fd4fa)
+![AddExpense2](https://github.com/user-attachments/assets/74c98758-2906-43dd-9238-1a93a342765d)
+![AddExpenseNotification](https://github.com/user-attachments/assets/4ab1e18c-96f5-4024-a1ba-5f8eb9ee4b57)
+
+Rest Screenshot: 
+
+https://github.com/user-attachments/assets/8ef06179-d8f4-49e5-853d-21b22a357279
 
 ---
 
