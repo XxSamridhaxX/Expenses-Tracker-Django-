@@ -29,8 +29,8 @@ A minimal yet fully functional Expense Tracker built with Django. This app allow
 ---
 
 ## Screenshots
-Lo
-
+* login:
+![Login](https://github.com/user-attachments/assets/33ebf4b8-f6ef-4347-b521-8e389f312a42)
 
 
 ---
