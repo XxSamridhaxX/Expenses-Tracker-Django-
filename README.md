@@ -1,16 +1,6 @@
 # 💸 Expense Tracker (Django)
 
 A minimal yet fully functional Expense Tracker built with Django. This app allows users to securely log in, add expenses, filter them by category or date, and visualize spending habits using charts. Features include CSV export, dark mode toggle with light bulb icon, and a user-friendly dashboard.
-dsaff
-sadfd
-addsgh
-asdg
-adsgh
-dsfggj
-sadsfghk
-fdsgj
-fdg
-ssdfg
 
 ---
 
